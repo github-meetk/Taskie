@@ -16,8 +16,6 @@ const TaskModule = () => {
   const [editTask, setEditTask] = useState(null); // State to handle task editing
   const navigate = useNavigate();
 
-  console.log(editTask?.status);
-
   const { userData } = useSelector((state) => state.auth);
 
   const fetchTasks = async () => {

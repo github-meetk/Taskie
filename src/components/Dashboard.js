@@ -1,16 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { apiConnector } from "../apiConnector";
+import toast from "react-hot-toast";
 
 const moduleData = [
   { name: "Tasks", icon: "📝", path: "/tasks", color: "bg-blue-500" },
   { name: "Locations", icon: "📍", path: "/locations", color: "bg-green-500" },
 ];
-
-// Sample data for additional features
-const currentStats = {
-  tasks: 8,
-  locations: 3,
-};
 
 const companyUpdates = [
   "Quarterly meeting on 2024-09-10",
@@ -24,6 +20,33 @@ const selfReminders = [
 ];
 
 const Dashboard = () => {
+  const [loading, setLoading] = useState(true);
+  const [tasks, setTasks] = useState();
+  const [locations, setLocations] = useState();
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+  const fetchCount = async () => {
+    setLoading(true);
+    try {
+      const task = await apiConnector("GET", BASE_URL + "/api/v1/getTask");
+      const location = await apiConnector(
+        "GET",
+        BASE_URL + "/api/v1/getLocation"
+      );
+
+      setTasks(task?.data.length);
+      setLocations(location?.data.length);
+    } catch (error) {
+      toast.error("Failed to fetch tasks");
+      console.error(error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchCount();
+    // eslint-disable-next-line
+  }, []);
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-center mb-8">
@@ -48,11 +71,11 @@ const Dashboard = () => {
       {/* Current Task and Location Visualization */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
         <div className="bg-white text-gray-800 rounded-2xl shadow p-6 flex flex-col items-center justify-center">
-          <span className="text-5xl font-bold">{currentStats.tasks}</span>
+          <span className="text-5xl font-bold">{tasks}</span>
           <span className="text-lg">Tasks</span>
         </div>
         <div className="bg-white text-gray-800 rounded-2xl shadow p-6 flex flex-col items-center justify-center">
-          <span className="text-5xl font-bold">{currentStats.locations}</span>
+          <span className="text-5xl font-bold">{locations}</span>
           <span className="text-lg">Locations</span>
         </div>
       </div>
