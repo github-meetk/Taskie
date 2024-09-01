@@ -28,11 +28,13 @@ const taskRoutes = require("./router/task");
 const locationRoutes = require("./router/location");
 const authRoutes = require("./router/auth");
 const adminRoutes = require("./router/admin");
+const companyUpdateRoutes = require("./router/update");
 
 app.use("/api/v1", taskRoutes);
 app.use("/api/v1", locationRoutes);
 app.use("/api/v1", authRoutes);
 app.use("/api/v1/admin", adminRoutes);
+app.use("/api/v1", companyUpdateRoutes);
 
 // Define routes
 // app.use('/api/users', require('./routes/users'));

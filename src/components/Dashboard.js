@@ -8,17 +8,12 @@ const moduleData = [
   { name: "Locations", icon: "📍", path: "/locations", color: "bg-green-500" },
 ];
 
-const companyUpdates = [
-  "Quarterly meeting on 2024-09-10",
-  "New project launch scheduled for October",
-  "Team-building event on 2024-09-15",
-];
-
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [tasks, setTasks] = useState([]);
   const [tasksCount, setTasksCount] = useState();
   const [locationsCount, setLocationsCount] = useState();
+  const [companyUpdates, setCompanyUpdates] = useState();
   const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   const fetchCount = async () => {
@@ -46,9 +41,19 @@ const Dashboard = () => {
     }
     setLoading(false);
   };
+  const fetchCompanyUpdates = async () => {
+    try {
+      const response = await apiConnector("GET", BASE_URL + "/api/v1/updates");
+      setCompanyUpdates(response.data);
+    } catch (error) {
+      toast.error("Failed to fetch company updates");
+      console.error("Error fetching updates:", error);
+    }
+  };
 
   useEffect(() => {
     fetchCount();
+    fetchCompanyUpdates();
     // eslint-disable-next-line
   }, []);
 
@@ -112,9 +117,10 @@ const Dashboard = () => {
             <h2 className="text-2xl font-semibold mb-4">Company Updates</h2>
             <ul className="list-disc list-inside">
               {companyUpdates.map((update, index) => (
-                <li key={index} className="text-lg">
-                  {update}
-                </li>
+                <div key={index} className="text-lg">
+                  <h3 className="text-lg font-semibold">{update.title}</h3>
+                  <p>{update.description}</p>
+                </div>
               ))}
             </ul>
           </div>

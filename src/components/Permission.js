@@ -5,12 +5,13 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 const Permission = () => {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
-  const { token } = useSelector((state) => state.auth);
+  const [companyUpdates, setCompanyUpdates] = useState([]);
+  const [newUpdate, setNewUpdate] = useState({ title: "", description: "" });
   const [loading, setLoading] = useState(true);
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
-
+  const { token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const fetchUsers = async () => {
@@ -32,14 +33,23 @@ const Permission = () => {
     setLoading(false);
   };
 
+  const fetchCompanyUpdates = async () => {
+    try {
+      const response = await apiConnector("GET", BASE_URL + "/api/v1/updates");
+      setCompanyUpdates(response.data);
+    } catch (error) {
+      toast.error("Failed to fetch company updates");
+      console.error("Error fetching updates:", error);
+    }
+  };
+
   const updateUserPermissions = async () => {
     if (!selectedUser) return;
-    console.log(selectedUser);
 
     try {
       await apiConnector(
         "PUT",
-        "http://localhost:4000/api/v1/admin/updatePermissions",
+        BASE_URL + "/api/v1/admin/updatePermissions",
         {
           userId: selectedUser._id,
           canCreateLocation: selectedUser.permissions.canCreateLocation,
@@ -68,8 +78,46 @@ const Permission = () => {
     }));
   };
 
+  const handleAddUpdate = async () => {
+    if (!newUpdate.title.trim() || !newUpdate.description.trim()) {
+      toast.error("Both title and description are required");
+      return;
+    }
+
+    try {
+      await apiConnector("POST", `${BASE_URL}/api/v1/addUpdate`, newUpdate, {
+        Authorization: `Bearer ${token}`,
+      });
+      toast.success("Company update added successfully");
+      setNewUpdate({ title: "", description: "" });
+      fetchCompanyUpdates(); // Refresh the updates list
+    } catch (error) {
+      toast.error("Failed to add update");
+      console.error("Error adding update:", error);
+    }
+  };
+
+  const handleDeleteUpdate = async (updateId) => {
+    try {
+      await apiConnector(
+        "DELETE",
+        `${BASE_URL}/api/v1/deleteUpdate/${updateId}`,
+        {},
+        {
+          Authorization: `Bearer ${token}`,
+        }
+      );
+      toast.success("Update deleted successfully");
+      fetchCompanyUpdates(); // Refresh the updates list
+    } catch (error) {
+      toast.error("Failed to delete update");
+      console.error("Error deleting update:", error);
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
+    fetchCompanyUpdates();
     // eslint-disable-next-line
   }, []);
 
@@ -84,6 +132,8 @@ const Permission = () => {
           ← Back to Home
         </div>
       </div>
+
+      {/* Users Table */}
       {loading ? (
         <div className="w-full h-full flex items-center justify-center">
           <button
@@ -136,20 +186,41 @@ const Permission = () => {
                   >
                     Permissions
                   </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {users.map((user) => (
                   <tr key={user._id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {user.username}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {user.email}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <div className="flex gap-2">
+                        <span>
+                          Create Location:{" "}
+                          {user.permissions.canCreateLocation ? "Yes" : "No"}
+                        </span>
+                        <span>
+                          Create Task:{" "}
+                          {user.permissions.canCreateTask ? "Yes" : "No"}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <button
-                        onClick={() => setSelectedUser(user)}
+                        onClick={() => {
+                          setSelectedUser(user);
+                          // Open a modal or form to update permissions
+                        }}
                         className="text-indigo-600 hover:text-indigo-900"
                       >
                         Update Permissions
@@ -163,44 +234,123 @@ const Permission = () => {
         </div>
       )}
 
-      {/* Update Permissions Modal */}
+      {/* Company Updates Section */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-semibold mb-4">Company Updates</h2>
+        <div className="mb-4">
+          <input
+            type="text"
+            value={newUpdate.title}
+            onChange={(e) =>
+              setNewUpdate({ ...newUpdate, title: e.target.value })
+            }
+            placeholder="Update Title"
+            className="p-2 border border-gray-300 rounded-md mb-2 w-full"
+          />
+          <textarea
+            value={newUpdate.description}
+            onChange={(e) =>
+              setNewUpdate({ ...newUpdate, description: e.target.value })
+            }
+            placeholder="Update Description"
+            className="p-2 border border-gray-300 rounded-md mb-2 w-full"
+          />
+          <button
+            onClick={handleAddUpdate}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md"
+          >
+            Add Update
+          </button>
+        </div>
+        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Title
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Description
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {companyUpdates.map((update) => (
+                <tr key={update._id}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {update.title}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {update.description}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button
+                      onClick={() => handleDeleteUpdate(update._id)}
+                      className="text-red-600 hover:text-red-900"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Update User Permissions Modal */}
       {selectedUser && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <h2 className="text-xl font-semibold">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-semibold mb-4">
               Update Permissions for {selectedUser.username}
             </h2>
-            <div className="mt-4">
-              <label>
-                <input
-                  type="checkbox"
-                  checked={selectedUser.permissions?.canCreateTask || false}
-                  onChange={() => handlePermissionChange("canCreateTask")}
-                />
-                Can Create Task
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Create Location
               </label>
-              <br />
-              <label>
-                <input
-                  type="checkbox"
-                  checked={selectedUser.permissions?.canCreateLocation || false}
-                  onChange={() => handlePermissionChange("canCreateLocation")}
-                />
-                Can Create Location
-              </label>
+              <input
+                type="checkbox"
+                checked={selectedUser.permissions.canCreateLocation}
+                onChange={() => handlePermissionChange("canCreateLocation")}
+                className="ml-2"
+              />
             </div>
-            <div className="mt-4 flex justify-between">
-              <button
-                onClick={() => setSelectedUser(null)}
-                className="px-4 py-2 bg-gray-500 text-white rounded-md"
-              >
-                Close
-              </button>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Create Task
+              </label>
+              <input
+                type="checkbox"
+                checked={selectedUser.permissions.canCreateTask}
+                onChange={() => handlePermissionChange("canCreateTask")}
+                className="ml-2"
+              />
+            </div>
+            <div className="flex gap-4">
               <button
                 onClick={updateUserPermissions}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md"
               >
                 Save Changes
+              </button>
+              <button
+                onClick={() => setSelectedUser(null)}
+                className="px-4 py-2 bg-gray-300 rounded-md"
+              >
+                Cancel
               </button>
             </div>
           </div>
