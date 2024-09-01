@@ -9,6 +9,7 @@ const Permission = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const { token } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(true);
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   const navigate = useNavigate();
 
@@ -17,7 +18,7 @@ const Permission = () => {
     try {
       const response = await apiConnector(
         "GET",
-        "http://localhost:4000/api/v1/admin/users",
+        BASE_URL + "/api/v1/admin/users",
         {},
         {
           Authorization: `Bearer ${token}`,

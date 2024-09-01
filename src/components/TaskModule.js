@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 
 const TaskModule = () => {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [loading, setLoading] = useState(true);
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({
@@ -22,10 +23,7 @@ const TaskModule = () => {
   const fetchTasks = async () => {
     setLoading(true);
     try {
-      const response = await apiConnector(
-        "GET",
-        "http://localhost:4000/api/v1/getTask"
-      );
+      const response = await apiConnector("GET", BASE_URL + "/api/v1/getTask");
       setTasks(response?.data);
     } catch (error) {
       toast.error("Failed to fetch tasks");
@@ -48,7 +46,7 @@ const TaskModule = () => {
     try {
       const response = await apiConnector(
         "POST",
-        "http://localhost:4000/api/v1/createTask",
+        BASE_URL + "/api/v1/createTask",
         newTask
       );
       setTasks([...tasks, response.data]);
@@ -62,10 +60,7 @@ const TaskModule = () => {
 
   const handleDelete = async (id) => {
     try {
-      await apiConnector(
-        "DELETE",
-        `http://localhost:4000/api/v1/deleteTask/${id}`
-      );
+      await apiConnector("DELETE", BASE_URL + `/api/v1/deleteTask/${id}`);
       setTasks(tasks.filter((task) => task._id !== id));
       toast.success("Task deleted");
     } catch (error) {
@@ -84,7 +79,7 @@ const TaskModule = () => {
       console.log(editTask);
       const response = await apiConnector(
         "PUT",
-        `http://localhost:4000/api/v1/admin/updateTask`,
+        BASE_URL + `/api/v1/admin/updateTask`,
         {
           taskId: editTask._id,
           name: editTask.name,
@@ -202,7 +197,7 @@ const TaskModule = () => {
             </tr>
           </thead>
           <tbody>
-            {tasks.map((task) => (
+            {tasks?.map((task) => (
               <tr key={task._id} className="border-b">
                 <td className="p-2">{task.name}</td>
                 <td className="p-2">{task.status}</td>

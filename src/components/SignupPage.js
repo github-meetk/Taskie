@@ -10,11 +10,12 @@ const SignupPage = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
     e.preventDefault();
     try {
       const response = await apiConnector(
         "POST",
-        "http://localhost:4000/api/v1/register",
+        BASE_URL + "/api/v1/register",
         {
           username,
           email,

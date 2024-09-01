@@ -12,6 +12,7 @@ const LocationModule = () => {
     address: "",
     capacity: "",
   });
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [editLocation, setEditLocation] = useState(null); // State to handle location editing
   const navigate = useNavigate();
 
@@ -22,7 +23,7 @@ const LocationModule = () => {
     try {
       const response = await apiConnector(
         "GET",
-        "http://localhost:4000/api/v1/getLocation"
+        BASE_URL + "/api/v1/getLocation"
       );
       setLocations(response?.data);
     } catch (error) {
@@ -46,7 +47,7 @@ const LocationModule = () => {
     try {
       const response = await apiConnector(
         "POST",
-        "http://localhost:4000/api/v1/createLocation",
+        BASE_URL + "http://localhost:4000/api/v1/createLocation",
         newLocation
       );
       setLocations([...locations, response.data]);
@@ -60,10 +61,7 @@ const LocationModule = () => {
 
   const handleDelete = async (id) => {
     try {
-      await apiConnector(
-        "DELETE",
-        `http://localhost:4000/api/v1/deleteLocation/${id}`
-      );
+      await apiConnector("DELETE", BASE_URL + `/api/v1/deleteLocation/${id}`);
       setLocations(locations.filter((location) => location._id !== id));
       toast.success("Location deleted");
     } catch (error) {
@@ -81,7 +79,7 @@ const LocationModule = () => {
     try {
       const response = await apiConnector(
         "PUT",
-        "http://localhost:4000/api/v1/admin/updateLocation",
+        BASE_URL + "/api/v1/admin/updateLocation",
         {
           locationId: editLocation._id,
           name: editLocation.name,
@@ -202,7 +200,7 @@ const LocationModule = () => {
             </tr>
           </thead>
           <tbody>
-            {locations.map((location) => (
+            {locations?.map((location) => (
               <tr key={location._id} className="border-b">
                 <td className="p-2">{location.name}</td>
                 <td className="p-2">{location.address}</td>
