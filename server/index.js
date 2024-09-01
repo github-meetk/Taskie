@@ -39,7 +39,12 @@ app.use("/api/v1/admin", adminRoutes);
 // app.use('/api/tasks', require('./routes/tasks'));
 // app.use('/api/locations', require('./routes/locations'));
 // app.use('/api/permissions', require('./routes/permissions'));
-
+app.get("/", (req, res) => {
+  return res.json({
+    success: true,
+    message: "Your server is up and running....",
+  });
+});
 // Start server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
