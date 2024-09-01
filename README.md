@@ -1,70 +1,97 @@
-# Getting Started with Create React App
+// db.js
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+/*
+Database Table Structure for Taskie Project
 
-## Available Scripts
+1. Users Table
+   - id (Primary Key)
+   - username (Unique)
+   - email (Unique)
+   - password_hash
+   - full_name
+   - role (e.g., admin, manager, employee)
+   - created_at
+   - updated_at
 
-In the project directory, you can run:
+2. Permissions Table
+   - id (Primary Key)
+   - name (e.g., create_task, edit_task, view_task, etc.)
+   - description
 
-### `npm start`
+3. User_Permissions Table (Many-to-Many relationship between Users and Permissions)
+   - id (Primary Key)
+   - user_id (Foreign Key referencing Users table)
+   - permission_id (Foreign Key referencing Permissions table)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+4. Tasks Table
+   - id (Primary Key)
+   - title
+   - description
+   - status (e.g., not started, in progress, completed)
+   - priority
+   - due_date
+   - created_by (Foreign Key referencing Users table)
+   - assigned_to (Foreign Key referencing Users table)
+   - created_at
+   - updated_at
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+5. Task_Comments Table
+   - id (Primary Key)
+   - task_id (Foreign Key referencing Tasks table)
+   - user_id (Foreign Key referencing Users table)
+   - comment_text
+   - created_at
 
-### `npm test`
+6. Task_Attachments Table
+   - id (Primary Key)
+   - task_id (Foreign Key referencing Tasks table)
+   - user_id (Foreign Key referencing Users table)
+   - file_name
+   - file_path
+   - file_type
+   - uploaded_at
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+7. Locations Table
+   - id (Primary Key)
+   - name
+   - address
+   - capacity
+   - created_by (Foreign Key referencing Users table)
+   - created_at
+   - updated_at
 
-### `npm run build`
+8. Task_Locations Table (Many-to-Many relationship between Tasks and Locations)
+   - id (Primary Key)
+   - task_id (Foreign Key referencing Tasks table)
+   - location_id (Foreign Key referencing Locations table)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Permissions to consider:
+- create_task
+- edit_task
+- view_task
+- delete_task
+- assign_task
+- add_task_comment
+- view_task_comments
+- upload_task_attachment
+- download_task_attachment
+- create_location
+- edit_location
+- view_location
+- delete_location
+- assign_user_permissions (admin only)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Admin functionality:
+- Admins should have all permissions by default
+- Admins can assign/revoke permissions to/from users
+- Admins can create new permissions
+- Admins can view audit logs of user actions
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Additional considerations:
+- Implement soft delete for tasks and locations (add a 'deleted_at' column)
+- Add indexes on frequently queried columns for performance
+- Consider adding a 'last_login' column to the Users table for tracking user activity
+- Implement proper password hashing and salting for user security
+- Use database transactions for operations that involve multiple tables
+- Set up foreign key constraints with appropriate ON DELETE and ON UPDATE actions
+*/
