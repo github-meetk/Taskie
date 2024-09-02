@@ -122,89 +122,55 @@ const Permission = () => {
   }, []);
 
   return (
-    <div className="p-8">
-      <div className="flex items-center w-full justify-between">
-        <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
-        <div
+    <div className="bg-gray-100 min-h-screen p-8">
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-4xl font-extrabold text-gray-900">
+          Admin Dashboard
+        </h1>
+        <button
           onClick={() => navigate("/")}
-          className="cursor-pointer text-blue-600 hover:text-blue-800 font-medium mb-4 transition-colors duration-200"
+          className="text-blue-500 hover:text-blue-700 text-lg font-semibold"
         >
           ← Back to Home
-        </div>
+        </button>
       </div>
 
-      {/* Users Table */}
-      {loading ? (
-        <div className="w-full h-full flex items-center justify-center">
-          <button
-            disabled
-            type="button"
-            className="py-2.5 px-5 me-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center"
-          >
-            <svg
-              aria-hidden="true"
-              role="status"
-              className="inline w-4 h-4 me-3 text-gray-200 animate-spin dark:text-gray-600"
-              viewBox="0 0 100 101"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                fill="currentColor"
-              />
-              <path
-                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                fill="#1C64F2"
-              />
-            </svg>
-            Loading...
-          </button>
-        </div>
-      ) : (
-        <div className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">All Users</h2>
-          <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-            <table className="min-w-full divide-y divide-gray-200">
+      {/* Users Section */}
+      <section className="mb-12">
+        <h2 className="text-3xl font-semibold text-gray-800 mb-6">
+          Manage Users
+        </h2>
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"></div>
+            <span className="ml-4 text-lg font-medium text-gray-600">
+              Loading...
+            </span>
+          </div>
+        ) : (
+          <div className="bg-white shadow-lg rounded-lg">
+            <table className="w-full text-left text-sm text-gray-600 divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
+                  <th className="px-6 py-4 font-medium text-gray-700">
                     Username
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Email
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
+                  <th className="px-6 py-4 font-medium text-gray-700">Email</th>
+                  <th className="px-6 py-4 font-medium text-gray-700">
                     Permissions
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
+                  <th className="px-6 py-4 font-medium text-gray-700">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody>
                 {users.map((user) => (
-                  <tr key={user._id}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {user.username}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {user.email}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <div className="flex gap-2">
+                  <tr key={user._id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-gray-900">{user.username}</td>
+                    <td className="px-6 py-4 text-gray-600">{user.email}</td>
+                    <td className="px-6 py-4">
+                      <div className="flex gap-4 text-gray-500">
                         <span>
                           Create Location:{" "}
                           {user.permissions.canCreateLocation ? "Yes" : "No"}
@@ -215,13 +181,10 @@ const Permission = () => {
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <td className="px-6 py-4">
                       <button
-                        onClick={() => {
-                          setSelectedUser(user);
-                          // Open a modal or form to update permissions
-                        }}
-                        className="text-indigo-600 hover:text-indigo-900"
+                        onClick={() => setSelectedUser(user)}
+                        className="text-blue-600 hover:text-blue-800 font-medium"
                       >
                         Update Permissions
                       </button>
@@ -231,74 +194,67 @@ const Permission = () => {
               </tbody>
             </table>
           </div>
-        </div>
-      )}
+        )}
+      </section>
 
       {/* Company Updates Section */}
-      <div className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Company Updates</h2>
-        <div className="mb-4">
-          <input
-            type="text"
-            value={newUpdate.title}
-            onChange={(e) =>
-              setNewUpdate({ ...newUpdate, title: e.target.value })
-            }
-            placeholder="Update Title"
-            className="p-2 border border-gray-300 rounded-md mb-2 w-full"
-          />
-          <textarea
-            value={newUpdate.description}
-            onChange={(e) =>
-              setNewUpdate({ ...newUpdate, description: e.target.value })
-            }
-            placeholder="Update Description"
-            className="p-2 border border-gray-300 rounded-md mb-2 w-full"
-          />
-          <button
-            onClick={handleAddUpdate}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md"
-          >
-            Add Update
-          </button>
+      <section>
+        <h2 className="text-3xl font-semibold text-gray-800 mb-6">
+          Company Updates
+        </h2>
+        <div className="bg-white shadow-lg rounded-lg p-6 mb-8">
+          <h3 className="text-xl font-semibold text-gray-700 mb-4">
+            Add New Update
+          </h3>
+          <div className="flex flex-col space-y-4">
+            <input
+              type="text"
+              value={newUpdate.title}
+              onChange={(e) =>
+                setNewUpdate({ ...newUpdate, title: e.target.value })
+              }
+              placeholder="Update Title"
+              className="p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500"
+            />
+            <textarea
+              value={newUpdate.description}
+              onChange={(e) =>
+                setNewUpdate({ ...newUpdate, description: e.target.value })
+              }
+              placeholder="Update Description"
+              className="p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500"
+            />
+            <button
+              onClick={handleAddUpdate}
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+            >
+              Add Update
+            </button>
+          </div>
         </div>
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-          <table className="min-w-full divide-y divide-gray-200">
+
+        <div className="bg-white shadow-lg rounded-lg">
+          <table className="w-full text-left text-sm text-gray-600 divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Title
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
+                <th className="px-6 py-4 font-medium text-gray-700">Title</th>
+                <th className="px-6 py-4 font-medium text-gray-700">
                   Description
                 </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Actions
-                </th>
+                <th className="px-6 py-4 font-medium text-gray-700">Actions</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody>
               {companyUpdates.map((update) => (
-                <tr key={update._id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {update.title}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <tr key={update._id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 text-gray-900">{update.title}</td>
+                  <td className="px-6 py-4 text-gray-600">
                     {update.description}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <td className="px-6 py-4">
                     <button
                       onClick={() => handleDeleteUpdate(update._id)}
-                      className="text-red-600 hover:text-red-900"
+                      className="text-red-600 hover:text-red-800 font-medium"
                     >
                       Delete
                     </button>
@@ -308,50 +264,48 @@ const Permission = () => {
             </tbody>
           </table>
         </div>
-      </div>
+      </section>
 
       {/* Update User Permissions Modal */}
       {selectedUser && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-semibold mb-4">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
               Update Permissions for {selectedUser.username}
             </h2>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Create Location
-              </label>
-              <input
-                type="checkbox"
-                checked={selectedUser.permissions.canCreateLocation}
-                onChange={() => handlePermissionChange("canCreateLocation")}
-                className="ml-2"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Create Task
-              </label>
-              <input
-                type="checkbox"
-                checked={selectedUser.permissions.canCreateTask}
-                onChange={() => handlePermissionChange("canCreateTask")}
-                className="ml-2"
-              />
-            </div>
-            <div className="flex gap-4">
-              <button
-                onClick={updateUserPermissions}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md"
-              >
-                Save Changes
-              </button>
-              <button
-                onClick={() => setSelectedUser(null)}
-                className="px-4 py-2 bg-gray-300 rounded-md"
-              >
-                Cancel
-              </button>
+            <div className="flex flex-col space-y-4">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={selectedUser.permissions.canCreateLocation}
+                  onChange={() => handlePermissionChange("canCreateLocation")}
+                  className="mr-2"
+                />
+                <label className="text-gray-700">Create Location</label>
+              </div>
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={selectedUser.permissions.canCreateTask}
+                  onChange={() => handlePermissionChange("canCreateTask")}
+                  className="mr-2"
+                />
+                <label className="text-gray-700">Create Task</label>
+              </div>
+              <div className="flex gap-4">
+                <button
+                  onClick={updateUserPermissions}
+                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+                >
+                  Save Changes
+                </button>
+                <button
+                  onClick={() => setSelectedUser(null)}
+                  className="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
         </div>

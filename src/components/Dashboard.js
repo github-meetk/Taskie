@@ -68,10 +68,6 @@ const Dashboard = () => {
         </div>
       ) : (
         <div className="container max-w-6xl mx-auto py-12">
-          <h1 className="text-4xl font-extrabold text-center text-gray-800 mb-12">
-            Welcome to Taskie ,{userData.username}!
-          </h1>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             {moduleData.map((module) => (
               <Link
