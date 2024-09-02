@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { apiConnector } from "../apiConnector";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
 
 const moduleData = [
   { name: "Tasks", icon: "📝", path: "/tasks", color: "bg-indigo-600" },
@@ -11,8 +10,6 @@ const moduleData = [
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
-
-  const { userData } = useSelector((state) => state.auth);
   const [tasks, setTasks] = useState([]);
   const [tasksCount, setTasksCount] = useState();
   const [locationsCount, setLocationsCount] = useState();
@@ -58,6 +55,7 @@ const Dashboard = () => {
   useEffect(() => {
     fetchCount();
     fetchCompanyUpdates();
+    // eslint-disable-next-line
   }, []);
 
   return (

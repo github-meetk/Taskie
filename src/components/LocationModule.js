@@ -34,6 +34,7 @@ const LocationModule = () => {
 
   useEffect(() => {
     fetchLocations();
+    // eslint-disable-next-line
   }, []);
 
   const handleInputChange = (e) => {

@@ -31,6 +31,7 @@ const TaskModule = () => {
 
   useEffect(() => {
     fetchTasks();
+    // eslint-disable-next-line
   }, []);
 
   const handleInputChange = (e) => {
