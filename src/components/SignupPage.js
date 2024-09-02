@@ -8,10 +8,12 @@ const SignupPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await apiConnector(
         "POST",
@@ -28,6 +30,7 @@ const SignupPage = () => {
     } catch (error) {
       toast.error("Failed to sign up");
     }
+    setLoading(false);
   };
 
   return (
