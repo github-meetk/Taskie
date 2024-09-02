@@ -11,10 +11,7 @@ app.use(express.json());
 
 // MongoDB connection
 mongoose
-  .connect(process.env.MONGODB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGODB_URL)
   .then(() => {
     console.log("DB connected successfully");
   })
@@ -30,23 +27,21 @@ const authRoutes = require("./router/auth");
 const adminRoutes = require("./router/admin");
 const companyUpdateRoutes = require("./router/update");
 
+//Route definition
 app.use("/api/v1", taskRoutes);
 app.use("/api/v1", locationRoutes);
 app.use("/api/v1", authRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1", companyUpdateRoutes);
 
-// Define routes
-// app.use('/api/users', require('./routes/users'));
-// app.use('/api/tasks', require('./routes/tasks'));
-// app.use('/api/locations', require('./routes/locations'));
-// app.use('/api/permissions', require('./routes/permissions'));
+//setup root
 app.get("/", (req, res) => {
   return res.json({
     success: true,
     message: "Your server is up and running....",
   });
 });
+
 // Start server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

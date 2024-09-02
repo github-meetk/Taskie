@@ -15,13 +15,9 @@ exports.registerUser = async (req, res) => {
     // Create a new user
     user = new User({ username, email, password, role });
     await user.save();
-    // Generate JWT token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "365d",
-    });
+
     res.status(201).json({
       success: true,
-      token,
     });
   } catch (error) {
     console.error(error);

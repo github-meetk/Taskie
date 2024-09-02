@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
+//protecting route for admin usage only
 exports.protectAdmin = async (req, res, next) => {
   let token;
 

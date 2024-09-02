@@ -15,16 +15,11 @@ const SignupPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await apiConnector(
-        "POST",
-        BASE_URL + "/api/v1/register",
-        {
-          username,
-          email,
-          password,
-        }
-      );
-      console.log(response);
+      await apiConnector("POST", BASE_URL + "/api/v1/register", {
+        username,
+        email,
+        password,
+      });
       toast.success("Account created successfully!");
       navigate("/login");
     } catch (error) {

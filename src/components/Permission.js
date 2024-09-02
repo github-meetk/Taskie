@@ -60,8 +60,8 @@ const Permission = () => {
         }
       );
       toast.success("Permissions updated successfully");
-      fetchUsers(); // Refresh the user list to reflect changes
-      setSelectedUser(null); // Close the modal after update
+      fetchUsers();
+      setSelectedUser(null);
     } catch (error) {
       toast.error("Failed to update permissions");
       console.error("Failed to update permissions:", error);
@@ -90,7 +90,7 @@ const Permission = () => {
       });
       toast.success("Company update added successfully");
       setNewUpdate({ title: "", description: "" });
-      fetchCompanyUpdates(); // Refresh the updates list
+      fetchCompanyUpdates();
     } catch (error) {
       toast.error("Failed to add update");
       console.error("Error adding update:", error);
@@ -108,7 +108,7 @@ const Permission = () => {
         }
       );
       toast.success("Update deleted successfully");
-      fetchCompanyUpdates(); // Refresh the updates list
+      fetchCompanyUpdates();
     } catch (error) {
       toast.error("Failed to delete update");
       console.error("Error deleting update:", error);

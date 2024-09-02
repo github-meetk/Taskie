@@ -1,4 +1,4 @@
-const Location = require("../models/LocationModule"); // Adjust the path as necessary
+const Location = require("../models/LocationModule");
 
 // Controller for creating a location
 const createLocation = async (req, res) => {

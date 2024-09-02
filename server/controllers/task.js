@@ -1,4 +1,4 @@
-const Task = require("../models/TaskModule"); // Adjust the path as necessary
+const Task = require("../models/TaskModule");
 
 // Controller for creating a task
 const createTask = async (req, res) => {

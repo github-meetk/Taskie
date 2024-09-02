@@ -45,7 +45,7 @@ function App() {
                     dispatch(setToken(null));
                     dispatch(setUserData(null));
                     navigate("/login");
-                    toast.success("/Logout successfully!!!");
+                    toast.success("Logout successfully!!!");
                   }}
                   className="m-auto py-3 text-white bg-[#2557D6] hover:bg-[#2557D6]/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#2557D6]/50 mb-2"
                 >

@@ -103,7 +103,7 @@ const Dashboard = () => {
               Company Updates
             </h2>
             <ul className="space-y-4">
-              {companyUpdates.map((update, index) => (
+              {companyUpdates?.map((update, index) => (
                 <li key={index} className="bg-white p-4 rounded-lg shadow-sm">
                   <h3 className="text-xl font-semibold text-indigo-600 mb-2">
                     {update.title}
