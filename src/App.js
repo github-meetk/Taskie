@@ -5,7 +5,7 @@ import TaskModule from "./components/TaskModule";
 import LocationModule from "./components/LocationModule";
 import LoginPage from "./components/LoginPage";
 import SignupPage from "./components/SignupPage";
-import OpenRoute from "./components/OpenRoute";
+import OpenRoute from "./services/OpenRoute";
 import Permission from "./components/Permission";
 import { useDispatch, useSelector } from "react-redux";
 import { setToken, setUserData } from "./slice/authSlice";

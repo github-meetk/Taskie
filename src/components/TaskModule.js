@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiConnector } from "../apiConnector";
+import { apiConnector } from "../services/apiConnector";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiConnector } from "../apiConnector";
+import { apiConnector } from "../services/apiConnector";
 import toast from "react-hot-toast";
 
 const SignupPage = () => {
@@ -35,79 +35,85 @@ const SignupPage = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-lg">
-        <h1 className="text-4xl font-semibold text-center text-blue-600">
-          Create Account
-        </h1>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label
-              className="block text-sm font-medium text-gray-700"
-              htmlFor="username"
+      {loading ? (
+        <div className="flex justify-center items-center h-screen">
+          <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-indigo-600"></div>
+        </div>
+      ) : (
+        <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-lg">
+          <h1 className="text-4xl font-semibold text-center text-blue-600">
+            Create Account
+          </h1>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label
+                className="block text-sm font-medium text-gray-700"
+                htmlFor="username"
+              >
+                Name
+              </label>
+              <input
+                id="username"
+                type="text"
+                placeholder="Enter your name"
+                value={username}
+                onChange={(e) => setName(e.target.value)}
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
+            <div>
+              <label
+                className="block text-sm font-medium text-gray-700"
+                htmlFor="email"
+              >
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
+            <div>
+              <label
+                className="block text-sm font-medium text-gray-700"
+                htmlFor="password"
+              >
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full py-3 text-lg font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
             >
-              Name
-            </label>
-            <input
-              id="username"
-              type="text"
-              placeholder="Enter your name"
-              value={username}
-              onChange={(e) => setName(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </div>
-          <div>
-            <label
-              className="block text-sm font-medium text-gray-700"
-              htmlFor="email"
+              Sign Up
+            </button>
+          </form>
+          <p className="text-center text-sm text-gray-500">
+            Already have an account?{" "}
+            <span
+              onClick={() => navigate("/login")}
+              className="text-blue-600 cursor-pointer hover:underline"
             >
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </div>
-          <div>
-            <label
-              className="block text-sm font-medium text-gray-700"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full py-3 text-lg font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
-          >
-            Sign Up
-          </button>
-        </form>
-        <p className="text-center text-sm text-gray-500">
-          Already have an account?{" "}
-          <span
-            onClick={() => navigate("/login")}
-            className="text-blue-600 cursor-pointer hover:underline"
-          >
-            Log in
-          </span>
-        </p>
-      </div>
+              Log in
+            </span>
+          </p>
+        </div>
+      )}
     </div>
   );
 };
